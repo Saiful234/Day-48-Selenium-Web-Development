@@ -1,39 +1,53 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import StaleElementReferenceException
+from selenium.webdriver.common.keys import Keys
+import time
+USERNAME = "bandotech96@gmail.com"
+PASSWORD = "Hieveryone12"
 chrome_driver_path = "/Development/chromedriver.exe"
-
 driver = webdriver.Chrome(executable_path=chrome_driver_path)
 
-driver.get("https://www.python.org/")
-# price = driver.find_element(By.ID, "productTitle")
-# print(price.text)
+driver.get("https://tinder.com/")
+driver.maximize_window()
+time.sleep(10)
+decline_button = driver.find_element(By.XPATH, '//*[@id="c-1560500889"]/div/div[2]/div/div/div[1]/div[2]/button/div[2]/div[2]')
+decline_button.click()
+login = driver.find_element(By.LINK_TEXT, "Log in")
 
-# search_bar = driver.find_element(By.NAME, "q")
-# print(search_bar.tag_name)
+login.click()
 
-# logo = driver.find_element(By.CLASS_NAME, "python-logo")
-# print(logo.size)
+try:
+    time.sleep(10)
+    more_option = driver.find_element(By.XPATH, '//*[@id="c1006085331"]/main/div/div[1]/div/div/div[3]/span/button')
+    more_option.click()
+    print("more option")
+except NoSuchElementException:
+    time.sleep(5)
+    login_fb = driver.find_element(By.XPATH, '//*[@id="c1006085331"]/main/div/div[1]/div/div/div[3]/span/div[2]/button')
+    login_fb.click()
+    print("logged in fb")
+finally:
+    time.sleep(5)
+    login_fb = driver.find_element(By.XPATH, '//*[@id="c1006085331"]/main/div/div[1]/div/div/div[3]/span/div[2]/button')
+    login_fb.click()
+    print("logged more options")
 
-# documentation_link = driver.find_element(By.CSS_SELECTOR, ".documentation-widget a")
-# print(documentation_link.text)
+base_window = driver.window_handles[0]
+fb_login_window = driver.window_handles[1]
 
-# bug_link = driver.find_element(By.XPATH, '//*[@id="site-map"]/div[2]/div/ul/li[3]/a')
-# print(bug_link.get_attribute("href"))
+driver.switch_to.window(fb_login_window)
+print(driver.title)
 
-event_times = driver.find_elements(By.CSS_SELECTOR, ".event-widget time")
-
-event_text = driver.find_elements(By.CSS_SELECTOR, ".event-widget li a")
-
-events = {}
-
-for n in range(len(event_times)):
-    events[n] = {
-        "time": event_times[n].text,
-        "name": event_text[n].text,
-    }
-
-print(events)
-
-
-driver.close()
+fb_username = driver.find_element(By.NAME, "email")
+fb_username.send_keys(USERNAME)
+fb_password = driver.find_element(By.NAME, "pass")
+fb_password.send_keys(PASSWORD)
+fb_login_button = driver.find_element(By.NAME, "login")
+fb_login_button.click()
+driver.switch_to.window(base_window)
+print(driver.title)
+location_allow = driver.find_element(By.XPATH, '//*[@id="c1006085331"]/main/div/div/div/div[3]/button[1]')
+location_allow.click()
+# driver.close()
