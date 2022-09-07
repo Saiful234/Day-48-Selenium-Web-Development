@@ -31,9 +31,9 @@ class InternetSpeedTwitterBot:
                                         '//*[@id="container"]/div/div[3]/div/div/div/div[2]/div[3]/div[1]/a/span[4]')
         go_button.click()
         time.sleep(60)
-        self.down_speed = self.driver.find_element(By.CLASS_NAME, "download-speed").text
+        self.down_speed = int(self.driver.find_element(By.CLASS_NAME, "download-speed").text)
         print(f"Your internet download speed is {self.down_speed}Mbps")
-        self.up_speed = self.driver.find_element(By.CLASS_NAME, "upload-speed").text
+        self.up_speed = int(self.driver.find_element(By.CLASS_NAME, "upload-speed").text)
         print(f"Your internet upload speed is {self.up_speed}Mbps")
         self.driver.close()
 
